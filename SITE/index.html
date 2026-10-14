@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Najjar Abramo Sociedade de Advogados</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@400;600;700&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root {
+    --gold: #b8973a;
+    --gold-light: #d4b05a;
+    --gold-dim: #7a621f;
+    --dark: #06090f;
+    --dark2: #0d1220;
+    --dark3: #111827;
+    --cream: #f0ead8;
+    --cream2: #e8dfc8;
+    --text-muted: #9ca3af;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Jost', sans-serif;
+    background: var(--dark);
+    color: var(--cream);
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3 { font-family: 'Cinzel', serif; }
+
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* HEADER */
+  header {
+    position: fixed; top: 0; width: 100%; z-index: 100;
+    background: rgba(6, 9, 15, 0.94);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(184, 151, 58, 0.2);
+  }
+
+  .header-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0 2rem; height: 80px;
+  }
+
+  .logo-wrap { display: flex; align-items: center; gap: 1rem; }
+  .logo-wrap img { height: 56px; }
+
+  .logo-text {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem; font-weight: 600;
+    letter-spacing: 0.12em; color: var(--cream);
+    line-height: 1.5; max-width: 220px;
+  }
+
+  nav { display: flex; gap: 2.5rem; }
+
+  nav a {
+    font-family: 'Cinzel', serif;
+    font-size: 0.68rem; font-weight: 400;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--text-muted); text-decoration: none;
+    position: relative; transition: color 0.3s; cursor: pointer;
+  }
+
+  nav a::after {
+    content: ''; position: absolute; bottom: -4px; left: 0;
+    width: 0; height: 1px; background: var(--gold); transition: width 0.3s;
+  }
+
+  nav a:hover, nav a.active-link { color: var(--gold-light); }
+  nav a:hover::after, nav a.active-link::after { width: 100%; }
+
+  .gold-line { width: 60px; height: 2px; background: linear-gradient(90deg, var(--gold), transparent); margin: 1.2rem 0; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+    background:
+      radial-gradient(ellipse at 20% 60%, rgba(184,151,58,0.06) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 20%, rgba(184,151,58,0.04) 0%, transparent 50%),
+      linear-gradient(160deg, #06090f 0%, #0d1220 50%, #06090f 100%);
+  }
+
+  .hero-bg-text {
+    position: absolute;
+    font-family: 'Cinzel', serif;
+    font-size: clamp(6rem, 18vw, 18rem); font-weight: 700;
+    color: rgba(184,151,58,0.025);
+    letter-spacing: 0.05em; user-select: none; white-space: nowrap;
+    top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 0;
+  }
+
+  .corner-deco {
+    position: absolute; width: 100px; height: 100px;
+    border: none; pointer-events: none;
+  }
+  .corner-deco.tl { top: 2rem; left: 2rem; border-top: 1px solid rgba(184,151,58,0.25); border-left: 1px solid rgba(184,151,58,0.25); }
+  .corner-deco.tr { top: 2rem; right: 2rem; border-top: 1px solid rgba(184,151,58,0.25); border-right: 1px solid rgba(184,151,58,0.25); }
+  .corner-deco.bl { bottom: 2rem; left: 2rem; border-bottom: 1px solid rgba(184,151,58,0.25); border-left: 1px solid rgba(184,151,58,0.25); }
+  .corner-deco.br { bottom: 2rem; right: 2rem; border-bottom: 1px solid rgba(184,151,58,0.25); border-right: 1px solid rgba(184,151,58,0.25); }
+
+  .hero-content { position: relative; z-index: 1; text-align: center; padding: 2rem; max-width: 800px; }
+
+  .hero-eyebrow {
+    font-family: 'Cinzel', serif; font-size: 0.63rem;
+    letter-spacing: 0.4em; color: var(--gold); text-transform: uppercase;
+    margin-bottom: 1.5rem; opacity: 0; animation: fadeUp 1s 0.3s forwards;
+  }
+
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.8rem, 6vw, 5.5rem); font-weight: 300;
+    line-height: 1.1; color: var(--cream); margin-bottom: 1.5rem;
+    opacity: 0; animation: fadeUp 1s 0.5s forwards;
+  }
+
+  .hero-title em { font-style: italic; color: var(--gold-light); }
+
+  .hero-subtitle {
+    font-size: 1rem; font-weight: 300; color: var(--text-muted);
+    letter-spacing: 0.06em; line-height: 1.9;
+    max-width: 520px; margin: 0 auto 2.5rem;
+    opacity: 0; animation: fadeUp 1s 0.7s forwards;
+  }
+
+  .hero-cta {
+    display: inline-block; font-family: 'Cinzel', serif;
+    font-size: 0.68rem; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--gold); border: 1px solid rgba(184,151,58,0.5);
+    padding: 0.9rem 2.5rem; cursor: pointer; transition: all 0.3s;
+    opacity: 0; animation: fadeUp 1s 0.9s forwards; background: transparent;
+  }
+
+  .hero-cta:hover { background: rgba(184,151,58,0.08); border-color: var(--gold); color: var(--gold-light); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* SECTIONS */
+  .section { padding: 7rem 2rem; position: relative; z-index: 1; }
+  .container { max-width: 1100px; margin: 0 auto; }
+
+  .section-label {
+    font-family: 'Cinzel', serif; font-size: 0.6rem;
+    letter-spacing: 0.45em; color: var(--gold);
+    text-transform: uppercase; margin-bottom: 0.6rem;
+  }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 300;
+    color: var(--cream); line-height: 1.2;
+  }
+
+  /* ABOUT */
+  .about-section {
+    background: var(--dark2);
+    border-top: 1px solid rgba(184,151,58,0.1);
+    border-bottom: 1px solid rgba(184,151,58,0.1);
+  }
+
+  .about-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 5rem; align-items: center; margin-top: 3rem;
+  }
+
+  .about-image-wrap { position: relative; }
+  .about-image-wrap img { width: 100%; border-radius: 2px; display: block; }
+  .about-image-wrap::before {
+    content: ''; position: absolute;
+    inset: -12px -12px 12px 12px;
+    border: 1px solid rgba(184,151,58,0.2); border-radius: 2px; z-index: -1;
+  }
+
+  .about-text p {
+    font-size: 1rem; font-weight: 300; color: #c9d1e0;
+    line-height: 1.9; margin-bottom: 1.2rem; letter-spacing: 0.02em;
+  }
+
+  .stat-row {
+    display: flex; gap: 2.5rem; margin-top: 2.5rem;
+    padding-top: 2rem; border-top: 1px solid rgba(184,151,58,0.15);
+  }
+
+  .stat-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.8rem; font-weight: 300; color: var(--gold-light); line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 0.68rem; letter-spacing: 0.15em;
+    color: var(--text-muted); text-transform: uppercase; margin-top: 0.4rem;
+  }
+
+  /* AREAS */
+  .areas-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1px; margin-top: 3.5rem;
+    border: 1px solid rgba(184,151,58,0.12);
+  }
+
+  .area-card {
+    background: var(--dark2); padding: 2.5rem 2rem;
+    position: relative; transition: background 0.4s; overflow: hidden;
+  }
+
+  .area-card::before {
+    content: ''; position: absolute; top: 0; left: 0;
+    width: 100%; height: 2px;
+    background: linear-gradient(90deg, var(--gold), transparent);
+    transform: scaleX(0); transform-origin: left; transition: transform 0.4s;
+  }
+
+  .area-card:hover { background: #111827; }
+  .area-card:hover::before { transform: scaleX(1); }
+
+  .area-number {
+    font-family: 'Cormorant Garamond', serif; font-size: 3rem; font-weight: 300;
+    color: rgba(184, 150, 58, 0.678); line-height: 1; margin-bottom: 1rem;
+  }
+
+  .area-title {
+    font-family: 'Cinzel', serif; font-size: 0.75rem;
+    letter-spacing: 0.1em; color: var(--cream); margin-bottom: 0.8rem;
+  }
+
+  .area-desc { font-size: 0.85rem; font-weight: 300; color: var(--text-muted); line-height: 1.7; }
+
+  /* DR. MARCELO */
+  .marcelo-section {
+    background: var(--dark2);
+    border-top: 1px solid rgba(184,151,58,0.1);
+    border-bottom: 1px solid rgba(184,151,58,0.1);
+  }
+
+  .marcelo-grid {
+    display: grid; grid-template-columns: 380px 1fr;
+    gap: 5rem; align-items: start; margin-top: 3rem;
+  }
+
+  .marcelo-image-wrap { position: relative; }
+  .marcelo-image-wrap img { width: 100%; display: block; border-radius: 2px; filter: grayscale(15%); }
+  .marcelo-image-wrap::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(6,9,15,0.45), transparent 55%);
+    border-radius: 2px;
+  }
+
+  .marcelo-badge {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: rgba(6,9,15,0.85);
+    border-top: 1px solid rgba(184,151,58,0.3);
+    padding: 1rem 1.5rem; z-index: 1; backdrop-filter: blur(4px);
+  }
+
+  .marcelo-badge-name { font-family: 'Cinzel', serif; font-size: 0.72rem; color: var(--gold-light); letter-spacing: 0.12em; }
+  .marcelo-badge-title { font-size: 0.68rem; color: var(--text-muted); margin-top: 0.2rem; letter-spacing: 0.08em; }
+
+  .marcelo-quote {
+    font-family: 'Cormorant Garamond', serif; font-size: 1.5rem;
+    font-style: italic; font-weight: 300; color: var(--gold-light);
+    line-height: 1.5; margin-bottom: 2rem;
+    padding-left: 1.5rem; border-left: 2px solid var(--gold-dim);
+  }
+
+  .marcelo-text p {
+    font-size: 1rem; font-weight: 300; color: #c9d1e0;
+    line-height: 1.9; margin-bottom: 1rem;
+  }
+
+  /* CONTACT */
+  .contact-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem; margin-top: 3.5rem;
+  }
+
+  .contact-card {
+    background: var(--dark2); border: 1px solid rgba(184,151,58,0.12);
+    padding: 2.5rem 2rem; transition: border-color 0.3s;
+  }
+
+  .contact-card:hover { border-color: rgba(184,151,58,0.35); }
+
+  .contact-card-icon {
+    font-family: 'Cormorant Garamond', serif; font-size: 1.8rem;
+    color: var(--gold); margin-bottom: 1rem;
+  }
+
+  .contact-card-title {
+    font-family: 'Cinzel', serif; font-size: 0.62rem;
+    letter-spacing: 0.3em; color: var(--gold);
+    text-transform: uppercase; margin-bottom: 1rem;
+  }
+
+  .contact-card p { font-size: 0.9rem; font-weight: 300; color: #c9d1e0; line-height: 1.8; }
+  .contact-card a { color: var(--gold-light); text-decoration: none; transition: color 0.2s; }
+  .contact-card a:hover { color: var(--cream); }
+
+  /* FOOTER */
+  footer {
+    background: var(--dark); border-top: 1px solid rgba(184,151,58,0.12);
+    padding: 2rem; text-align: center; position: relative; z-index: 1;
+  }
+
+  footer p { font-size: 0.72rem; color: var(--text-muted); letter-spacing: 0.1em; }
+
+  /* FLOATING BUTTONS */
+  .float-btn {
+    position: fixed; right: 1.5rem; z-index: 200;
+    width: 52px; height: 52px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.45);
+    transition: transform 0.2s, box-shadow 0.2s; text-decoration: none;
+  }
+
+  .float-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(0,0,0,0.55); }
+  .float-wa { bottom: 1.5rem; background: #22c55e; }
+  .float-ig { bottom: 5.5rem; background: linear-gradient(135deg, #f59e0b, #ef4444, #ec4899, #8b5cf6); }
+
+  /* REVEAL */
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.8s ease, transform 0.8s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .about-grid, .marcelo-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .areas-grid { grid-template-columns: 1fr 1fr; }
+    .contact-grid { grid-template-columns: 1fr; }
+    .logo-text { display: none; }
+  }
+
+  @media (max-width: 600px) {
+    .areas-grid { grid-template-columns: 1fr; }
+    nav { gap: 1.2rem; }
+    nav a { font-size: 0.58rem; letter-spacing: 0.1em; }
+    .header-inner { padding: 0 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- FLOATING BUTTONS -->
+<a href="https://wa.me/5511915485153?text=Olá,%20vim%20pelo%20site" target="_blank" class="float-btn float-wa" title="WhatsApp">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="24" height="24" fill="white">
+    <path d="M16 .4C7.4.4.4 7.4.4 16c0 2.8.7 5.5 2.1 7.9L0 32l8.3-2.4c2.3 1.2 4.9 1.8 7.6 1.8h.1c8.6 0 15.6-7 15.6-15.6S24.6.4 16 .4zm0 28.4c-2.4 0-4.7-.6-6.7-1.7l-.5-.3-4.9 1.4 1.4-4.8-.3-.5c-1.2-2-1.8-4.4-1.8-6.8 0-7.1 5.8-12.9 12.9-12.9S28.9 8.9 28.9 16 23.1 28.8 16 28.8zm7.3-9.9c-.4-.2-2.3-1.1-2.6-1.2-.3-.1-.5-.2-.7.2-.2.3-.8 1.2-1 1.4-.2.2-.4.3-.8.1-.4-.2-1.6-.6-3.1-2-.1-.1-2.1-1.9-2.4-2.3-.3-.4 0-.6.2-.8.2-.2.4-.4.6-.6.2-.2.3-.3.4-.5.1-.2.1-.4 0-.6-.1-.2-.7-1.8-1-2.4-.3-.6-.6-.5-.8-.5h-.7c-.2 0-.6.1-.9.4-.3.3-1.2 1.2-1.2 2.9 0 1.7 1.2 3.4 1.4 3.6.2.2 2.4 3.7 5.8 5.2.8.3 1.4.5 1.9.6.8.3 1.6.2 2.2.1.7-.1 2.3-.9 2.6-1.8.3-.9.3-1.6.2-1.8-.1-.2-.3-.2-.7-.4z"/>
+  </svg>
+</a>
+
+<a href="https://www.instagram.com/najjarabramoadv" target="_blank" class="float-btn float-ig" title="Instagram">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22" fill="white">
+    <path d="M7 2C4.24 2 2 4.24 2 7v10c0 2.76 2.24 5 5 5h10c2.76 0 5-2.24 5-5V7c0-2.76-2.24-5-5-5H7zm10 2c1.66 0 3 1.34 3 3v10c0 1.66-1.34 3-3 3H7c-1.66 0-3-1.34-3-3V7c0-1.66 1.34-3 3-3h10zm-5 3.5A4.5 4.5 0 1016.5 12 4.5 4.5 0 0012 7.5zm0 2A2.5 2.5 0 1112 14a2.5 2.5 0 010-5zm4.75-2.75a1 1 0 110 2 1 1 0 010-2z"/>
+  </svg>
+</a>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="logo-wrap">
+      <img src="logo.png" alt="Logo Najjar Abramo" style="height: 80px;">
+      <span class="logo-text">NAJJAR ABRAMO<br>SOCIEDADE DE ADVOGADOS</span>
+    </div>
+    <nav>
+      <a onclick="openPage('home')" class="active-link" id="nav-home">Home</a>
+      <a onclick="openPage('areas')" id="nav-areas">Áreas</a>
+      <a onclick="openPage('marcelo')" id="nav-marcelo">Dr. Marcelo</a>
+      <a onclick="openPage('contato')" id="nav-contato">Contato</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HOME -->
+<div id="home" class="page active">
+
+  <section class="hero">
+    <div class="corner-deco tl"></div>
+    <div class="corner-deco tr"></div>
+    <div class="corner-deco bl"></div>
+    <div class="corner-deco br"></div>
+    <div class="hero-bg-text">NA</div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">São Paulo · Avaré</p>
+      <h1 class="hero-title">Assessoria Jurídica<br><em>Empresarial</em></h1>
+      <p class="hero-subtitle">Mais de 25 anos oferecendo soluções jurídicas estratégicas para empresas de diversos portes e segmentos.</p>
+      <button class="hero-cta" onclick="openPage('contato')">Fale Conosco</button>
+    </div>
+  </section>
+
+  <section class="section about-section">
+    <div class="container">
+      <p class="section-label reveal">O Escritório</p>
+      <h2 class="section-title reveal">Sobre Nós</h2>
+      <div class="gold-line"></div>
+
+      <div class="about-grid">
+        <div class="about-image-wrap reveal">
+          <img src="escritorio.jpg" alt="Escritório Najjar Abramo">
+        </div>
+        <div class="about-text">
+          <p class="reveal">O <strong style="color:var(--cream)">Najjar Abramo Sociedade de Advogados</strong> é um escritório especializado em Assessoria Jurídica Empresarial Completa, com mais de 25 anos de sólida experiência no atendimento a empresas de diversos portes e segmentos, sob a liderança de seu Sócio Fundador.</p>
+          <p class="reveal">Com sede na cidade de São Paulo–SP, e unidade em Avaré–SP, o escritório conta com estrutura moderna, sofisticada e atualizada, refletindo compromisso com excelência, conforto e profissionalismo.</p>
+          <p class="reveal">Nosso trabalho é pautado pela proximidade com o cliente, oferecendo atuação preventiva, eficiente e alinhada aos objetivos empresariais.</p>
+          <div class="stat-row reveal">
+            <div>
+              <div class="stat-number">25+</div>
+              <div class="stat-label">Anos de Experiência</div>
+            </div>
+            <div>
+              <div class="stat-number">2</div>
+              <div class="stat-label">Unidades</div>
+            </div>
+            <div>
+              <div class="stat-number">6</div>
+              <div class="stat-label">Áreas de Atuação</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- AREAS -->
+<div id="areas" class="page">
+  <section class="section" style="padding-top:8rem;background:var(--dark);">
+    <div class="container">
+      <p class="section-label reveal">Especialidades</p>
+      <h2 class="section-title reveal">Áreas de Atuação</h2>
+      <div class="gold-line"></div>
+      <div class="areas-grid">
+        <div class="area-card reveal">
+          <div class="area-number">01</div>
+          <h3 class="area-title">Direito Societário</h3>
+          <p class="area-desc">Constituição de empresas, reorganizações societárias e governança corporativa.</p>
+        </div>
+        <div class="area-card reveal">
+          <div class="area-number">02</div>
+          <h3 class="area-title">Direito Contratual</h3>
+          <p class="area-desc">Elaboração, revisão e negociação de contratos empresariais.</p>
+        </div>
+        <div class="area-card reveal">
+          <div class="area-number">03</div>
+          <h3 class="area-title">Direito Tributário</h3>
+          <p class="area-desc">Planejamento fiscal e atuação no contencioso administrativo e judicial.</p>
+        </div>
+        <div class="area-card reveal">
+          <div class="area-number">04</div>
+          <h3 class="area-title">Trabalhista Empresarial</h3>
+          <p class="area-desc">Atuação preventiva e contenciosa em relações de trabalho.</p>
+        </div>
+        <div class="area-card reveal">
+          <div class="area-number">05</div>
+          <h3 class="area-title">Direito Cível Empresarial</h3>
+          <p class="area-desc">Recuperação de crédito, gestão de passivos e litígios estratégicos.</p>
+        </div>
+        <div class="area-card reveal">
+          <div class="area-number">06</div>
+          <h3 class="area-title">Compliance e Riscos</h3>
+          <p class="area-desc">Implementação de políticas internas e adequação regulatória.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- DR. MARCELO -->
+<div id="marcelo" class="page">
+  <section class="section marcelo-section" style="padding-top:8rem;">
+    <div class="container">
+      <p class="section-label reveal">Sócio Fundador</p>
+      <h2 class="section-title reveal">Dr. Marcelo Najjar Abramo</h2>
+      <div class="gold-line"></div>
+      <div class="marcelo-grid">
+        <div class="marcelo-image-wrap reveal">
+          <img src="marcelo.jpg" alt="Dr. Marcelo Najjar Abramo">
+          <div class="marcelo-badge">
+            <div class="marcelo-badge-name">Dr. Marcelo Najjar Abramo</div>
+            <div class="marcelo-badge-title">Sócio Fundador</div>
+          </div>
+        </div>
+        <div class="marcelo-text">
+          <p class="marcelo-quote reveal">"Excelência jurídica construída ao longo de mais de duas décadas de dedicação ao direito empresarial."</p>
+          <p class="reveal">Sócio fundador com mais de 25 anos de experiência em Direito Empresarial, Dr. Marcelo Najjar Abramo construiu uma trajetória sólida ao lado de empresas de diferentes portes e segmentos.</p>
+          <p class="reveal">Sua atuação estratégica abrange as principais áreas do direito empresarial, com foco na proteção jurídica e no crescimento sustentável das organizações.</p>
+          <p class="reveal">Reconhecido pela proximidade com clientes e pela excelência na entrega de resultados, lidera o escritório com visão moderna e comprometimento ético.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- CONTATO -->
+<div id="contato" class="page">
+  <section class="section" style="padding-top:8rem;background:var(--dark);">
+    <div class="container">
+      <p class="section-label reveal">Entre em Contato</p>
+      <h2 class="section-title reveal">Contato</h2>
+      <div class="gold-line"></div>
+      <div class="contact-grid">
+        <div class="contact-card reveal">
+          <div class="contact-card-icon">SP</div>
+          <div class="contact-card-title">Unidade São Paulo</div>
+          <p>Av. Cidade Jardim, 377<br>Sala 255 · Itaim Bibi<br>São Paulo – SP</p>
+          <p style="margin-top:1rem;">(11) 2311-4633</p>
+        </div>
+        <div class="contact-card reveal">
+          <div class="contact-card-icon">AV</div>
+          <div class="contact-card-title">Unidade Avaré</div>
+          <p>Av. Prof. Celso Ferreira da Silva, 190<br>Cj. 03 · Jardim Europa<br>Avaré – SP</p>
+          <p style="margin-top:1rem;">(14) 3333-1157</p>
+        </div>
+        <div class="contact-card reveal">
+          <div class="contact-card-icon">✉</div>
+          <div class="contact-card-title">E-mail & WhatsApp</div>
+          <p><a href="mailto:secretaria@najjarabramoadv.com.br?subject=Contato pelo site&body=Olá, gostaria de mais informações.">secretaria@najjarabramoadv.com.br</a></p>
+          <p style="margin-top:1.2rem;">
+            <a href="https://wa.me/5511915485153?text=Olá,%20vim%20pelo%20site" target="_blank" style="display:inline-flex;align-items:center;gap:0.5rem;color:var(--gold-light);">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="15" height="15" fill="currentColor"><path d="M16 .4C7.4.4.4 7.4.4 16c0 2.8.7 5.5 2.1 7.9L0 32l8.3-2.4c2.3 1.2 4.9 1.8 7.6 1.8h.1c8.6 0 15.6-7 15.6-15.6S24.6.4 16 .4zm0 28.4c-2.4 0-4.7-.6-6.7-1.7l-.5-.3-4.9 1.4 1.4-4.8-.3-.5c-1.2-2-1.8-4.4-1.8-6.8 0-7.1 5.8-12.9 12.9-12.9S28.9 8.9 28.9 16 23.1 28.8 16 28.8zm7.3-9.9c-.4-.2-2.3-1.1-2.6-1.2-.3-.1-.5-.2-.7.2-.2.3-.8 1.2-1 1.4-.2.2-.4.3-.8.1-.4-.2-1.6-.6-3.1-2-.1-.1-2.1-1.9-2.4-2.3-.3-.4 0-.6.2-.8.2-.2.4-.4.6-.6.2-.2.3-.3.4-.5.1-.2.1-.4 0-.6-.1-.2-.7-1.8-1-2.4-.3-.6-.6-.5-.8-.5h-.7c-.2 0-.6.1-.9.4-.3.3-1.2 1.2-1.2 2.9 0 1.7 1.2 3.4 1.4 3.6.2.2 2.4 3.7 5.8 5.2.8.3 1.4.5 1.9.6.8.3 1.6.2 2.2.1.7-.1 2.3-.9 2.6-1.8.3-.9.3-1.6.2-1.8-.1-.2-.3-.2-.7-.4z"/></svg>
+              Falar pelo WhatsApp
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <p>© 2026 Najjar Abramo Sociedade de Advogados · Todos os direitos reservados</p>
+</footer>
+
+<script>
+  function openPage(pageId) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(pageId).classList.add('active');
+    document.querySelectorAll('nav a').forEach(a => a.classList.remove('active-link'));
+    document.getElementById('nav-' + pageId).classList.add('active-link');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setTimeout(initReveal, 60);
+  }
+
+  function initReveal() {
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => { el.classList.remove('visible'); obs.observe(el); });
+  }
+
+  initReveal();
+</script>
+</body>
+</html>
